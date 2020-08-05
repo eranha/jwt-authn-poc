@@ -38,11 +38,6 @@ claim_value_provider = TokenClaimValueProvider.new(
   iss: 'https://accounts.google.com'
 )
 
-puts 'token claims'
-token_claims.each do |key, value|
-  puts "\tkey => #{key}, value => #{value}"
-end
-
 google_cert_url = 'https://www.googleapis.com/oauth2/v1/certs'
 
 AuthenticateJwt.new.(
