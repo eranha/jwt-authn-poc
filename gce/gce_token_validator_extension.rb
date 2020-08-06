@@ -12,9 +12,9 @@ class GCETokenValidatorExtension
       puts "\tkey => #{key}, value => #{value}"
       case key
       when :instance_id
-        valid -= 1 if value != '6394360463648205200'
+        valid -= 1 if value != '4015063098376718561'
       when :instance_name
-        valid -= 1 if value != 'eran-test-instance'
+        valid -= 1 if value != 'gce-identity--poc-instance'
       when :project_id
         valid -= 1 if value != 'refreshing-mark-284016'
       when :project_number
