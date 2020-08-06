@@ -6,23 +6,38 @@
  
 # Simple Token
 ```
+# generate prive to signthe token
 rsa_private = OpenSSL::PKey::RSA.generate 2048
+
+# define token expiration
 exp = Time.now.to_i + 4 * 3600
-exp_payload = { iss: 'http://identity-provider',
-                aud: 'my_service',
-                sub: 'foobar', exp: exp }
-token = JWT.encode exp_payload, rsa_private, 'RS256'
-claim_value_provider = TokenClaimValueProvider.new(
-  sub: 'foobar',
+
+# token claims
+exp_payload = { 
+  iss: 'self-signed',
   aud: 'my_service',
-  iss: 'http://identity-provider')
+  sub: 'foo_bar', 
+  exp: exp 
+}
+
+# issue decoded signed toekn 
+token = JWT.encode exp_payload, rsa_private, 'RS256'
+
+# define the expected claim values
+claim_value_provider = TokenClaimValueProvider.new(
+  sub: 'foo_bar',
+  aud: 'my_service',
+  iss: 'self-signed')
+
+# define pub;ic key priovide that will be injected to the authenticator
+public_key_provider = PublicKeyProvider.new(rsa_private.public_key)
 
 authenticate_jwt = AuthenticateJwt.new
 authenticate_jwt.(
           token: token,
           token_claim_value_provider: claim_value_provider,
-          token_validator_ext: nil,
-          public_key_provider: PublicKeyProvider.new(rsa_private.public_key),
+          token_validator_ext: nil, # no token validation extension is required
+          public_key_provider: public_key_provider,
           algorithm: 'RS256'
 ```
 
