@@ -82,7 +82,7 @@ AuthenticateJwt.new.(
 The below code snippet depicts how to authenticate a JWT token signed by GCP [`Service Account`](https://cloud.google.com/iam/docs/understanding-service-accounts).
 For more inforamtion on how to create JWT token and sign it using the [`Service Account` private key](https://cloud.google.com/iam/docs/understanding-service-accounts#managing_service_account_keys) follow the link:
 [Authentication between services](https://cloud.google.com/endpoints/docs/openapi/service-account-authentication).
-For more information on `Service Acccount` Keys follow: [Creating and managing service account keys](https://cloud.google.com/iam/docs/creating-managing-service-account-keys)
+For more information on `Service Acccount` Keys follow: [Creating and managing service account keys](https://cloud.google.com/iam/docs/creating-managing-service-account-keys). For code refrence in python unsing google auth clinet lib, on how to generate Service Account self signed token, please reffer to: [Code Reference](https://github.com/eranha/jwt-authn-poc/blob/master/issue_sa_token.py)
 ```
 # Create and sign a JWT token using GCP service account key and save it in token.txt file
 token = File.open('token.txt').read
