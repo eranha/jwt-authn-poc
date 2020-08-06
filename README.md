@@ -5,6 +5,7 @@
  
  
 ### Simple Token
+The below snippet depicts how authenticate a self signed JWT token by injecting that claim values and public key providers to the authenticator.  
 ```
 # generate private to sign the token
 rsa_private = OpenSSL::PKey::RSA.generate 2048
