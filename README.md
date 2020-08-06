@@ -73,6 +73,9 @@ AuthenticateJwt.new.(
 ```
 
 ### GCP Service Account Self Signed Token
+The below code snippet depicts how to validate a JWT token signed by GCP Service Account.
+To find more inforamtion on how to crater JWT and sign it using the Service Account private follow the below link:
+[Authentication between services](https://cloud.google.com/endpoints/docs/openapi/service-account-authentication)
 ```
 # Create and sign a JWT token using GCP service account key and save it in token.txt file
 token = File.open('token.txt').read
