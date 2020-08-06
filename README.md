@@ -48,7 +48,8 @@ For more information on GCE instance identity follow: [Verifying the Identity of
 ```
 
 # run curl inside the GCE instance 
-# curl -H "Metadata-Flavor: Google" 'http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience=conjur/host-my/service&format=full'
+# curl -H "Metadata-Flavor: Google" \
+# 'http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience=conjur/host-my/service&format=full'
 # copy the curl output and save it in token.txt file
 token = File.open('token.txt').read
 
