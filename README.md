@@ -29,7 +29,7 @@ claim_value_provider = TokenClaimValueProvider.new(
   aud: 'my_service',
   iss: 'self-signed')
 
-# define pub;ic key priovide that will be injected to the authenticator
+# define public key priovide that will be injected to the authenticator
 public_key_provider = PublicKeyProvider.new(rsa_private.public_key)
 
 authenticate_jwt = AuthenticateJwt.new
