@@ -42,6 +42,9 @@ authenticate_jwt.(
 ```
 
 ### GCE Identity Token
+The below code snippet depicts how to authenticate GCE identity token signed by Google. Each instance has a unique JSON Web Token (JWT) that includes details about the instance as well as Google's RS256 signature. Your applications can verify the signature against Google's [public Oauth2 certificates](https://www.googleapis.com/oauth2/v1/certs) to confirm the identity of the instance with which they have established a connection.
+For more information on GCE instance identity follow: [Verifying the Identity of Instances](https://cloud.google.com/compute/docs/instances/verifying-instance-identity)
+For more information on how to obtain instance identity token follow: [Obtaining the instance identity token](https://cloud.google.com/compute/docs/instances/verifying-instance-identity#request_signature)
 ```
 # issue an identity identity in GCE and save it in token.txt file
 token = File.open('token.txt').read
