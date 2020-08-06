@@ -6,7 +6,7 @@
  
 ### Simple Token
 ```
-# generate prive to sign the token
+# generate private to sign the token
 rsa_private = OpenSSL::PKey::RSA.generate 2048
 
 # define token expiration
@@ -43,7 +43,7 @@ authenticate_jwt.(
 
 ### GCE Identity Token
 ```
-# issue an identity otekn in GCE and save it in token.txt file
+# issue an identity identity in GCE and save it in token.txt file
 token = File.open('token.txt').read
 
 # decode the token without veiriicaiton to extract the `kid` header claim
@@ -74,7 +74,7 @@ AuthenticateJwt.new.(
 
 ### GCP Service Account Self Signed Token
 ```
-# issue an identity otekn in GCE and save it in token.txt file
+# Create and sign a JWT token using GCP service account key and save it in token.txt file
 token = File.open('token.txt').read
 
 # decode the token without verification to extract the `kid` header claim
