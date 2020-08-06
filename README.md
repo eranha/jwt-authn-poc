@@ -6,7 +6,7 @@
  
 # Simple Token
 ```
-# generate prive to signthe token
+# generate prive to sign the token
 rsa_private = OpenSSL::PKey::RSA.generate 2048
 
 # define token expiration
@@ -20,7 +20,7 @@ exp_payload = {
   exp: exp 
 }
 
-# issue decoded signed toekn 
+# issue decoded signed token 
 token = JWT.encode exp_payload, rsa_private, 'RS256'
 
 # define the expected claim values
@@ -29,7 +29,7 @@ claim_value_provider = TokenClaimValueProvider.new(
   aud: 'my_service',
   iss: 'self-signed')
 
-# define public key priovide that will be injected to the authenticator
+# define public key provider that will be injected to the authenticator
 public_key_provider = PublicKeyProvider.new(rsa_private.public_key)
 
 authenticate_jwt = AuthenticateJwt.new
@@ -47,13 +47,13 @@ authenticate_jwt.(
 token = File.open('token.txt').read
 
 # decode the token without veiriicaiton to extract the `kid` header claim
-kid = token_headers = decoded_token[1]['kid']
+kid = decoded_token[1]['kid']
 
 # construct google pubic key provider
 google_cert_url = 'https://www.googleapis.com/oauth2/v1/certs'
-google_public_key_provider = GooglePublicKeyProvider.new(google_cert_url, token_headers['kid'])
+google_public_key_provider = GooglePublicKeyProvider.new(google_cert_url, kid)
 
-# construct the expected standard claims that willbe injected to the authenticator
+# construct the expected standard claims that will be injected to the authenticator
 claim_value_provider = TokenClaimValueProvider.new(
   sub: '114729809789815358648',
   aud: 'conjur',
