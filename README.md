@@ -54,6 +54,7 @@ For more information on GCE instance identity follow: [Verifying the Identity of
 token = File.open('token.txt').read
 
 # decode the token without veiriicaiton to extract the `kid` header claim
+decoded_token = JWT.decode(token, nil, false)
 kid = decoded_token[1]['kid']
 
 # construct google pubic key provider
