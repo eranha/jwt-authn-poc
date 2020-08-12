@@ -14,8 +14,8 @@ token_headers = decoded_token[1]
 token_claims = decoded_token[0]
 
 # construct google pubic key provider
-google_cert_url = 'https://accounts.google.com'
-google_public_key_provider = GooglePublicKeyProvider.new(google_cert_url)
+provider_uri = 'https://accounts.google.com'
+google_public_key_provider = GooglePublicKeyProvider.new(provider_uri)
 
 # construct the expected standard claims that will be injected to the authenticator
 claim_value_provider = TokenClaimValueProvider.new(
