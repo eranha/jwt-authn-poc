@@ -1,12 +1,12 @@
-require 'open-uri'
+require 'openid_connect'
 require 'json'
 
 class GooglePublicKeyProvider
-  def initialize(url, kid)
-    raw = JSON.parse open(url) { |io| io.read }
-    certificate = OpenSSL::X509::Certificate.new raw[kid]
-    @public_key = certificate.public_key
+  def initialize(url)
+    provider = OpenIDConnect::Discovery::Provider::Config.discover!(url)
+    @verification_options = { jwks:        {keys: provider.jwks},
+                              algorithms:  provider.id_token_signing_alg_values_supported}
   end
 
-  attr_reader :public_key
+  attr_reader :verification_options
 end

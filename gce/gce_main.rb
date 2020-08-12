@@ -8,23 +8,26 @@ require 'jwt'
 # issue an identity otekn in GCE and save it in token.txt file
 token = File.open('gce/token.txt').read
 
-# decode the token without verification to extract the `kid` header claim
+# decode the token without verification to print claims
 decoded_token = JWT.decode(token, nil, false)
 token_headers = decoded_token[1]
-kid = token_headers['kid']
 token_claims = decoded_token[0]
 
 # construct google pubic key provider
-google_cert_url = 'https://www.googleapis.com/oauth2/v1/certs'
-google_public_key_provider = GooglePublicKeyProvider.new(google_cert_url, kid)
+google_cert_url = 'https://accounts.google.com'
+google_public_key_provider = GooglePublicKeyProvider.new(google_cert_url)
 
 # construct the expected standard claims that will be injected to the authenticator
 claim_value_provider = TokenClaimValueProvider.new(
-  sub: '108551114425891493254',
-  aud: 'conjur',
+  sub: '115072799640778267780',
+  aud: 'conjur/my_account/my_host',
   iss: 'https://accounts.google.com'
 )
 
+puts 'token header claims'
+token_headers.each do |key, value|
+  puts "\tkey => #{key}, value => #{value}"
+end
 
 puts 'token claims'
 token_claims.each do |key, value|
@@ -36,9 +39,9 @@ end
 token_validation_ext = GCETokenValidatorExtension.new
 
 AuthenticateJwt.new.(
-  token:                      token,
+  token:                        token,
     token_claim_value_provider: claim_value_provider,
     token_validator_ext:        token_validation_ext,
-    public_key_provider:        google_public_key_provider,
-    algorithm:                  'RS256'
+    public_key:                 nil,
+    verification_options:       google_public_key_provider.verification_options
 )

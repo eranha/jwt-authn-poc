@@ -37,6 +37,6 @@ authenticate_jwt.(
   token: token,
     token_claim_value_provider: claim_value_provider,
     token_validator_ext: nil, # no token validation extension is required
-    public_key_provider: public_key_provider,
-    algorithm: 'RS256'
+    public_key:                 public_key_provider.public_key,
+    verification_options:       {algorithm: 'RS256'}
 )

@@ -19,8 +19,8 @@ class AuthenticateJwt
       token
       token_claim_value_provider
       token_validator_ext
-      public_key_provider
-      algorithm
+      public_key
+      verification_options
     ]
   ) do
 
@@ -44,9 +44,9 @@ class AuthenticateJwt
       puts 'validate_exp_claims'
       begin
         decoded_token = JWT.decode(@token,
-                                   @public_key_provider.public_key,
+                                   @public_key,
                                    true,
-                                   algorithm: @algorithm)
+                                   verification_options)
       rescue JWT::ExpiredSignature
         # Handle expired token, e.g. logout user or deny access
         raise TokenExpired
@@ -54,14 +54,15 @@ class AuthenticateJwt
     end
 
     def validate_iat_claims
-      puts 'validate_exp_claims'
+      puts 'validate_iat_claims'
       begin
         # Add iat to the validation to check if the token has been manipulated
+
         decoded_token = JWT.decode(@token,
-                                   @public_key_provider.public_key,
+                                   @public_key,
                                    true,
-                                   verify_iat: true,
-                                   algorithm: @algorithm)
+                                   verification_options.merge(verify_iat: true)
+        )
       rescue JWT::InvalidIatError
         # Handle invalid token, e.g. logout user or deny access
         raise InvalidIssuedAt
@@ -74,11 +75,10 @@ class AuthenticateJwt
       begin
         # Add aud to the validation to check if the token has been manipulated
         decoded_token = JWT.decode(@token,
-                                   @public_key_provider.public_key,
+                                   @public_key,
                                    true,
-                                   aud: aud,
-                                   verify_aud: true,
-                                   algorithm: @algorithm)
+                                   verification_options.merge(aud: aud,
+                                                              verify_aud: true))
       rescue JWT::InvalidAudError
         # Handle invalid token, e.g. logout user or deny access
         raise InvalidAudience
@@ -92,11 +92,10 @@ class AuthenticateJwt
       begin
         # Add sub to the validation to check if the token has been manipulated
         decoded_token = JWT.decode(@token,
-                                   @public_key_provider.public_key,
+                                   @public_key,
                                    true,
-                                   sub: sub,
-                                   verify_sub: true,
-                                   algorithm: @algorithm)
+                                   verification_options.merge(sub: sub,
+                                                              verify_sub: true))
       rescue JWT::InvalidSubError
         # Handle invalid token, e.g. logout user or deny access
         raise InvalidSubject
@@ -109,11 +108,10 @@ class AuthenticateJwt
       begin
         # Add iss to the validation to check if the token has been manipulated
         decoded_token = JWT.decode(@token,
-                                   @public_key_provider.public_key,
+                                   @public_key,
                                    true,
-                                   iss: iss,
-                                   verify_iss: true,
-                                   algorithm: @algorithm)
+                                   verification_options.merge(iss: iss,
+                                                              verify_iss: true))
       rescue JWT::InvalidIssuerError
         # Handle invalid token, e.g. logout user or deny access
         raise InvalidIssuer
@@ -125,6 +123,13 @@ class AuthenticateJwt
       if @token_validator_ext
         @token_validator_ext.valid?(@token)
       end
+    end
+
+    def verification_options
+      if @verification_options.nil?
+        @verification_options = {}
+      end
+      @verification_options
     end
   end
 end

@@ -30,16 +30,15 @@ claim_value_provider = TokenClaimValueProvider.new(
   aud: 'my_service',
   iss: 'self-signed')
 
-# define public key provider that will be injected to the authenticator
-public_key_provider = PublicKeyProvider.new(rsa_private.public_key)
-
+authenticate_jwt = AuthenticateJwt.new
 authenticate_jwt = AuthenticateJwt.new
 authenticate_jwt.(
-          token: token,
-          token_claim_value_provider: claim_value_provider,
-          token_validator_ext: nil, # no token validation extension is required
-          public_key_provider: public_key_provider,
-          algorithm: 'RS256'
+  token: token,
+    token_claim_value_provider: claim_value_provider,
+    token_validator_ext: nil, # no token validation extension is required
+    public_key:                 rsa_private.public_key,
+    verification_options:       {algorithm: 'RS256'}
+)
 ```
 
 ### GCE Identity Token
@@ -53,13 +52,10 @@ For more information on GCE instance identity follow: [Verifying the Identity of
 # copy the curl output and save it in token.txt file
 token = File.open('token.txt').read
 
-# decode the token without veiriicaiton to extract the `kid` header claim
-decoded_token = JWT.decode(token, nil, false)
-kid = decoded_token[1]['kid']
 
 # construct google pubic key provider
-google_cert_url = 'https://www.googleapis.com/oauth2/v1/certs'
-google_public_key_provider = GooglePublicKeyProvider.new(google_cert_url, kid)
+google_cert_url = 'https://accounts.google.com'
+google_public_key_provider = GooglePublicKeyProvider.new(google_cert_url)
 
 # construct the expected standard claims that will be injected to the authenticator
 claim_value_provider = TokenClaimValueProvider.new(
@@ -72,12 +68,13 @@ claim_value_provider = TokenClaimValueProvider.new(
 token_validation_ext = GCETokenValidatorExtension.new
 
 AuthenticateJwt.new.(
-  token:                      token,
-  token_claim_value_provider: claim_value_provider,
-  token_validator_ext:        token_validation_ext,
-  public_key_provider:        google_public_key_provider,
-  algorithm:                  'RS256'
+  token:                        token,
+    token_claim_value_provider: claim_value_provider,
+    token_validator_ext:        token_validation_ext,
+    public_key:                 nil, # public key is taken from the [:jwks] in verification_options
+    verification_options:       google_public_key_provider.verification_options
 )
+
 ```
 
 ### GCP Service Account Self Signed Token
