@@ -1,6 +1,6 @@
 require_relative '../authenticate_jwt'
 require_relative '../token_claim_value_provider'
-require_relative '../google_public_key_provider'
+require_relative 'google_public_key_provider'
 require_relative 'gce_token_validator_extension'
 require 'jwt'
 
